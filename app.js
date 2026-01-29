@@ -133,7 +133,7 @@ function render() {
               badgeClass += " status-ondemand";
               statusText = "📹 配信";
               break;
-            case "オンライン":
+            case "ONLINE":
               badgeClass += " status-online";
               statusText = "💻 Online";
               break;
@@ -335,4 +335,5 @@ if (term.end) endDate.value = term.end;
 
 updateTitle();
 render();
+
 
