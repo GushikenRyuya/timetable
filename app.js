@@ -1,18 +1,15 @@
-// 曜日
 const days = ["月","火","水","木","金"];
 
-// 時限（指定仕様）
+// 時限（修正版：昼休憩を明確化）
 const periods = [
-  { id: 1, name: "1限", time: "8:30-10:00" },
-  { id: 2, name: "2限", time: "10:20-11:50" },
-  { id: "lunch", name: "昼休憩", time: "11:50-12:50" },
-  { id: 3, name: "3限", time: "12:50-14:20" },
-  { id: 4, name: "4限", time: "14:40-16:10" },
-  { id: 5, name: "5限", time: "16:20-17:50" }
+  { id: 1, name: "１限", time: "8:30〜10:00" },
+  { id: 2, name: "２限", time: "10:20〜11:50" },
+  { id: "lunch", name: "昼休憩", time: "11:50〜12:50" },
+  { id: 3, name: "３限", time: "12:50〜14:20" },
+  { id: 4, name: "４限", time: "14:40〜16:10" },
+  { id: 5, name: "５限", time: "16:20〜17:50" }
 ];
 
-
-// データ読み込み
 let data = JSON.parse(localStorage.getItem("timetablePro")) || {};
 let term = JSON.parse(localStorage.getItem("term")) || {};
 
@@ -53,7 +50,7 @@ function updateTitle(){
 }
 
 
-// 表描画
+// 表描画（修正版）
 function render(){
 
   let html = "<table>";
@@ -70,8 +67,8 @@ function render(){
     html += `
       <tr>
         <th class="period">
-          ${p.name}<br>
-          <span>${p.time}</span>
+          <div class="p-name">${p.name}</div>
+          <div class="p-time">${p.time}</div>
         </th>
     `;
 
@@ -100,7 +97,7 @@ function render(){
 }
 
 
-// モーダル開く
+// モーダル
 function openModal(key){
 
   currentKey = key;
@@ -117,13 +114,12 @@ function openModal(key){
 }
 
 
-// 閉じる
 function closeModal(){
   document.getElementById("modal").classList.add("hidden");
 }
 
 
-// 保存ボタン
+// 保存
 document.getElementById("saveBtn").onclick = () => {
 
   data[currentKey] = {
@@ -141,14 +137,11 @@ document.getElementById("saveBtn").onclick = () => {
 };
 
 
-// 期間保存ボタン
 document.getElementById("saveTerm").onclick = saveTerm;
-
-// 閉じるボタン
 document.getElementById("closeBtn").onclick = closeModal;
 
 
-// 初期表示
+// 初期化
 if(term.start){
   document.getElementById("startDate").value = term.start;
 }
