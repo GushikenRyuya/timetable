@@ -1,4 +1,4 @@
-const days = ["月","火","水","木","金"];
+const days = ["月", "火", "水", "木", "金"];
 
 const periods = [
   { id: 1, name: "１限", time: "8:30〜10:00" },
@@ -9,101 +9,77 @@ const periods = [
   { id: 5, name: "５限", time: "16:20〜17:50" }
 ];
 
-const STATUS = ["出席","欠席","休講","オンデマンド","ONLINE"];
+const STATUS = ["未選択", "出席", "欠席", "休講", "オンデマンド", "オンライン"];
 
 let data = JSON.parse(localStorage.getItem("timetablePro")) || {};
 let term = JSON.parse(localStorage.getItem("term")) || {};
 
 let currentKey = null;
 
-
 /* ================= 日付フォーマット ================= */
-
-function formatDate(str){
-
+function formatDate(str) {
   const d = new Date(str);
-
   const y = d.getFullYear();
-  const m = ("0"+(d.getMonth()+1)).slice(-2);
-  const day = ("0"+d.getDate()).slice(-2);
-
+  const m = ("0" + (d.getMonth() + 1)).slice(-2);
+  const day = ("0" + d.getDate()).slice(-2);
   return `${y}/${m}/${day}`;
 }
 
-
 /* ================= 保存 ================= */
-
-function save(){
+function save() {
   localStorage.setItem("timetablePro", JSON.stringify(data));
   render();
 }
 
-
 /* ================= 期間 ================= */
-
-function saveTerm(){
-
+function saveTermFunc() {
   term.start = startDate.value;
   term.end = endDate.value;
-
   localStorage.setItem("term", JSON.stringify(term));
-
   updateTitle();
+  
+  // フィードバック
+  const btn = document.getElementById('saveTermBtn');
+  const originalText = btn.textContent;
+  btn.textContent = '✓ 保存完了';
+  setTimeout(() => {
+    btn.textContent = originalText;
+  }, 1500);
 }
 
-
-function updateTitle(){
-
-  if(term.start && term.end){
-
+function updateTitle() {
+  if (term.start && term.end) {
     const s = formatDate(term.start);
     const e = formatDate(term.end);
-
-    title.innerText = `${s} ～ ${e} の時間割`;
-
-  }else{
-
+    title.innerText = `${s} 〜 ${e}`;
+  } else {
     title.innerText = "時間割";
   }
 }
 
-
 /* ================= 表描画 ================= */
-
-function render(){
-
+function render() {
   let html = "<table>";
 
+  // ヘッダー行
   html += "<tr><th>時限</th>";
   days.forEach(d => html += `<th>${d}</th>`);
   html += "</tr>";
 
-
+  // 各時限の行
   periods.forEach(p => {
-
-    html += `
-    <tr>
-      <th class="period">
-        <div>${p.name}</div>
-        <div class="time">${p.time}</div>
-      </th>
-    `;
+    html += `<tr><th class="period"><div>${p.name}</div><div class="time">${p.time}</div></th>`;
 
     days.forEach(d => {
-
       const key = d + "_" + p.id;
       const item = data[key] || {};
 
       html += `
-      <td data-key="${key}"
-          style="background:${item.color || "#fff"}">
-
+      <td data-key="${key}" style="background:${item.color || "#fff"}">
         <div class="name">${item.name || ""}</div>
         <div class="room">${item.room || ""}</div>
-
       </td>
       `;
-
     });
 
     html += "</tr>";
@@ -113,23 +89,18 @@ function render(){
 
   app.innerHTML = html;
 
-  // クリック登録（iOS対策）
-  document.querySelectorAll("td").forEach(td=>{
-
-    td.onclick = ()=> openModal(td.dataset.key);
-
+  // クリックイベント登録
+  document.querySelectorAll("td[data-key]").forEach(td => {
+    td.onclick = () => openModal(td.dataset.key);
   });
 }
 
-
 /* ================= モーダル ================= */
-
-function openModal(key){
-
+function openModal(key) {
   currentKey = key;
 
-  if(!data[key]){
-    data[key] = { attend:{} };
+  if (!data[key]) {
+    data[key] = { attend: {} };
   }
 
   const item = data[key];
@@ -140,25 +111,28 @@ function openModal(key){
   note.value = item.note || "";
   color.value = item.color || "#90caf9";
 
+  // 授業情報タブに切り替え
+  showInfoTab();
+  
   buildAttend();
 
   modal.classList.remove("hidden");
+  
+  // iOSのスクロール制御
+  document.body.style.overflow = 'hidden';
 }
 
-
-function closeModal(){
+function closeModal() {
   modal.classList.add("hidden");
+  document.body.style.overflow = '';
 }
-
 
 /* ================= 出席管理 ================= */
-
-function buildAttend(){
-
+function buildAttend() {
   attendArea.innerHTML = "";
 
-  if(!term.start || !term.end){
-    attendArea.innerHTML = "※期間を設定してください";
+  if (!term.start || !term.end) {
+    attendArea.innerHTML = '<div style="text-align:center;color:var(--text-secondary);padding:20px;">※期間を設定してください</div>';
     return;
   }
 
@@ -167,12 +141,12 @@ function buildAttend(){
 
   const attend = data[currentKey].attend || {};
 
-  while(d <= end){
+  while (d <= end) {
+    const key = d.toISOString().slice(0, 10);
+    const dayOfWeek = d.getDay();
 
-    const key = d.toISOString().slice(0,10);
-
-    if(d.getDay() !== 0 && d.getDay() !== 6){
-
+    // 平日のみ（月〜金）
+    if (dayOfWeek !== 0 && dayOfWeek !== 6) {
       const row = document.createElement("div");
       row.className = "att-row";
 
@@ -182,19 +156,18 @@ function buildAttend(){
       const select = document.createElement("select");
 
       STATUS.forEach(s => {
-
         const op = document.createElement("option");
         op.value = s;
         op.innerText = s;
 
-        if(attend[key] === s) op.selected = true;
+        if (attend[key] === s) {
+          op.selected = true;
+        }
 
         select.appendChild(op);
-
       });
 
-      select.onchange = ()=>{
-
+      select.onchange = () => {
         attend[key] = select.value;
         data[currentKey].attend = attend;
         save();
@@ -206,62 +179,59 @@ function buildAttend(){
       attendArea.appendChild(row);
     }
 
-    d.setDate(d.getDate()+1);
+    d.setDate(d.getDate() + 1);
   }
 }
 
-
-/* ================= タブ ================= */
-
-tabInfo.addEventListener("click",()=>{
-
+/* ================= タブ切り替え ================= */
+function showInfoTab() {
   tabInfo.classList.add("active");
   tabAttend.classList.remove("active");
-
   infoArea.classList.remove("hidden");
   attendArea.classList.add("hidden");
-});
+}
 
-
-tabAttend.addEventListener("click",()=>{
-
+function showAttendTab() {
   tabAttend.classList.add("active");
   tabInfo.classList.remove("active");
-
   infoArea.classList.add("hidden");
   attendArea.classList.remove("hidden");
-});
+}
 
+tabInfo.addEventListener("click", showInfoTab);
+tabAttend.addEventListener("click", showAttendTab);
 
-/* ================= 保存 ================= */
-
-saveBtn.addEventListener("click",()=>{
-
+/* ================= 保存ボタン ================= */
+saveBtn.addEventListener("click", () => {
   data[currentKey] = {
-
     name: className.value,
     room: room.value,
     teacher: teacher.value,
     note: note.value,
     color: color.value,
     attend: data[currentKey].attend || {}
-
   };
 
   save();
   closeModal();
 });
 
-
+/* ================= 閉じるボタン ================= */
 closeBtn.addEventListener("click", closeModal);
 
-saveTerm.addEventListener("click", saveTerm);
+// モーダルのオーバーレイクリックで閉じる
+modal.addEventListener("click", (e) => {
+  if (e.target.classList.contains("modal-overlay")) {
+    closeModal();
+  }
+});
 
+/* ================= 期間保存ボタン ================= */
+saveTermBtn.addEventListener("click", saveTermFunc);
 
 /* ================= 初期化 ================= */
-
-if(term.start) startDate.value = term.start;
-if(term.end) endDate.value = term.end;
+if (term.start) startDate.value = term.start;
+if (term.end) endDate.value = term.end;
 
 updateTitle();
 render();
