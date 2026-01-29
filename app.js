@@ -17,13 +17,29 @@ let term = JSON.parse(localStorage.getItem("term")) || {};
 let currentKey = null;
 
 
-/* ================= 基本 ================= */
+/* ================= 日付フォーマット ================= */
+
+function formatDate(str){
+
+  const d = new Date(str);
+
+  const y = d.getFullYear();
+  const m = ("0"+(d.getMonth()+1)).slice(-2);
+  const day = ("0"+d.getDate()).slice(-2);
+
+  return `${y}/${m}/${day}`;
+}
+
+
+/* ================= 保存 ================= */
 
 function save(){
   localStorage.setItem("timetablePro", JSON.stringify(data));
   render();
 }
 
+
+/* ================= 期間 ================= */
 
 function saveTerm(){
 
@@ -40,12 +56,13 @@ function updateTitle(){
 
   if(term.start && term.end){
 
-    const s = term.start.replaceAll("-","/");
-    const e = term.end.replaceAll("-","/");
+    const s = formatDate(term.start);
+    const e = formatDate(term.end);
 
     title.innerText = `${s} ～ ${e} の時間割`;
 
   }else{
+
     title.innerText = "時間割";
   }
 }
@@ -153,7 +170,7 @@ function buildAttend(){
       row.className = "att-row";
 
       const date = document.createElement("span");
-      date.innerText = key.replaceAll("-","/");
+      date.innerText = formatDate(key);
 
       const select = document.createElement("select");
 
@@ -234,7 +251,7 @@ closeBtn.onclick = closeModal;
 saveTerm.onclick = saveTerm;
 
 
-/* ================= 初期 ================= */
+/* ================= 初期化 ================= */
 
 if(term.start) startDate.value = term.start;
 if(term.end) endDate.value = term.end;
