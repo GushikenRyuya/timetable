@@ -147,6 +147,20 @@ td:active {
   transform: scale(0.98);
 }
 
+.status-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-weight: 600;
+  z-index: 1;
+  backdrop-filter: blur(4px);
+}
+
 .name {
   font-weight: 600;
   font-size: 12px;
@@ -340,6 +354,16 @@ td:active {
   display: none;
 }
 
+.attend-header {
+  text-align: center;
+  padding: 16px;
+  background: var(--background);
+  border-radius: 10px;
+  margin-bottom: 16px;
+  font-size: 15px;
+  color: var(--text-primary);
+}
+
 .att-row {
   display: flex;
   justify-content: space-between;
@@ -354,6 +378,19 @@ td:active {
 .att-row span {
   flex-shrink: 0;
   font-weight: 500;
+}
+
+.att-row span.this-week {
+  color: var(--primary-color);
+  font-weight: 600;
+  position: relative;
+}
+
+.att-row span.this-week::before {
+  content: '●';
+  margin-right: 4px;
+  font-size: 8px;
+  vertical-align: middle;
 }
 
 .att-row select {
@@ -432,5 +469,10 @@ td:active {
   .form-label textarea,
   .att-row select {
     color: var(--text-primary);
+  }
+  
+  .status-badge {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
   }
 }
