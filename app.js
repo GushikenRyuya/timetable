@@ -95,7 +95,7 @@ function render(){
       const item = data[key] || {};
 
       html += `
-      <td onclick="openModal('${key}')"
+      <td data-key="${key}"
           style="background:${item.color || "#fff"}">
 
         <div class="name">${item.name || ""}</div>
@@ -112,6 +112,13 @@ function render(){
   html += "</table>";
 
   app.innerHTML = html;
+
+  // クリック登録（iOS対策）
+  document.querySelectorAll("td").forEach(td=>{
+
+    td.onclick = ()=> openModal(td.dataset.key);
+
+  });
 }
 
 
@@ -206,29 +213,29 @@ function buildAttend(){
 
 /* ================= タブ ================= */
 
-tabInfo.onclick = ()=>{
+tabInfo.addEventListener("click",()=>{
 
   tabInfo.classList.add("active");
   tabAttend.classList.remove("active");
 
   infoArea.classList.remove("hidden");
   attendArea.classList.add("hidden");
-};
+});
 
 
-tabAttend.onclick = ()=>{
+tabAttend.addEventListener("click",()=>{
 
   tabAttend.classList.add("active");
   tabInfo.classList.remove("active");
 
   infoArea.classList.add("hidden");
   attendArea.classList.remove("hidden");
-};
+});
 
 
 /* ================= 保存 ================= */
 
-saveBtn.onclick = ()=>{
+saveBtn.addEventListener("click",()=>{
 
   data[currentKey] = {
 
@@ -243,12 +250,12 @@ saveBtn.onclick = ()=>{
 
   save();
   closeModal();
-};
+});
 
 
-closeBtn.onclick = closeModal;
+closeBtn.addEventListener("click", closeModal);
 
-saveTerm.onclick = saveTerm;
+saveTerm.addEventListener("click", saveTerm);
 
 
 /* ================= 初期化 ================= */
