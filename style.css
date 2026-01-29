@@ -1,128 +1,159 @@
-body {
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  margin: 0;
-  background: #f5f7fa;
+body{
+  margin:0;
+  font-family:-apple-system,sans-serif;
+  background:#f5f7fa;
 }
 
 
-/* ヘッダー */
+/* header */
 
-header {
-  background: #fff;
-  padding: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  position: sticky;
-  top: 0;
+header{
+  background:#fff;
+  padding:10px;
+  box-shadow:0 2px 4px #ccc;
 }
 
-h1 {
-  font-size: 18px;
-  text-align: center;
-  margin: 5px 0;
+h1{
+  text-align:center;
+  font-size:17px;
 }
 
-.term-box {
-  display: flex;
-  justify-content: center;
-  gap: 5px;
-  font-size: 12px;
+.term-box{
+  display:flex;
+  justify-content:center;
+  gap:5px;
+  font-size:12px;
 }
 
 
-/* 表 */
+/* table */
 
-#app {
-  padding: 5px;
+#app{padding:5px;}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  table-layout:fixed;
 }
 
-table {
-  border-collapse: collapse;
-  width: 100%;
-  background: #fff;
+th,td{
+  border:1px solid #ccc;
+  padding:3px;
+  text-align:center;
+  overflow:hidden;
+  word-break:break-word;
 }
 
-th, td {
-  border: 1px solid #ccc;
-  text-align: center;
-  padding: 4px;
+.period{
+  background:#eaf0f7;
+  width:75px;
 }
 
-
-/* 時限列（重要修正） */
-
-.period {
-  width: 75px;
-  background: #eaf0f7;
+.time{
+  font-size:10px;
+  color:#444;
 }
 
-.p-name {
-  font-size: 13px;
-  font-weight: bold;
+td{
+  height:65px;
+  font-size:11px;
 }
 
-.p-time {
-  font-size: 10px;
-  color: #333;
-  margin-top: 2px;
+.name{
+  font-weight:bold;
+  white-space:normal;
 }
 
-
-/* マス */
-
-td {
-  height: 65px;   /* 高さアップ */
-  font-size: 11px;
-  cursor: pointer;
-}
-
-.name {
-  font-weight: bold;
-  font-size: 12px;
-}
-
-.room {
-  font-size: 10px;
-  color: #444;
+.room{
+  font-size:10px;
 }
 
 
-/* モーダル */
+/* modal */
 
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.4);
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.4);
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
 
-.hidden {
-  display: none;
-}
+.hidden{display:none;}
 
-.modal-box {
-  background: #fff;
-  width: 90%;
-  max-width: 340px;
-  padding: 15px;
-  border-radius: 10px;
-}
-
-.modal-box label {
-  display: block;
-  font-size: 13px;
-  margin-bottom: 8px;
-}
-
-.modal-box input,
-.modal-box textarea {
-  width: 100%;
-  font-size: 14px;
-  padding: 5px;
+.modal-box{
+  background:#fff;
+  width:90%;
+  max-width:360px;
+  padding:15px;
+  border-radius:10px;
 }
 
 
-.btn-area {
-  text-align:
+/* tabs */
+
+.tabs{
+  display:flex;
+  margin-bottom:10px;
+}
+
+.tabs button{
+  flex:1;
+  border:none;
+  padding:6px;
+  background:#ddd;
+}
+
+.tabs .active{
+  background:#2196f3;
+  color:#fff;
+}
+
+
+/* attend */
+
+.att-row{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:6px;
+  font-size:13px;
+}
+
+.att-row select{
+  font-size:12px;
+}
+
+
+/* form */
+
+label{
+  display:block;
+  margin-bottom:6px;
+  font-size:13px;
+}
+
+input,textarea{
+  width:100%;
+  font-size:14px;
+}
+
+
+/* btn */
+
+.btn-area{
+  text-align:center;
+  margin-top:10px;
+}
+
+button{
+  padding:6px 12px;
+  border:none;
+  background:#2196f3;
+  color:#fff;
+  border-radius:5px;
+}
+
+button:last-child{
+  background:#999;
+}
