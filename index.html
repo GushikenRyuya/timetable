@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>時間割アプリ</title>
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <h1>時間割</h1>
+
+  <p class="hint">マスをタップして編集</p>
+
+  <div id="app"></div>
+
+  <!-- 編集用モーダル -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-box">
+
+      <h2>授業編集</h2>
+
+      <label>
+        授業名
+        <input id="className" type="text">
+      </label>
+
+      <label>
+        教室
+        <input id="room" type="text">
+      </label>
+
+      <label>
+        メモ
+        <textarea id="note"></textarea>
+      </label>
+
+      <label>
+        色
+        <input id="color" type="color" value="#90caf9">
+      </label>
+
+      <div class="btn-area">
+        <button id="saveBtn">保存</button>
+        <button id="closeBtn">閉じる</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
