@@ -6,14 +6,12 @@
 
 <title>時間割</title>
 
-<link rel="manifest" href="manifest.json">
 <link rel="stylesheet" href="style.css">
 
 </head>
 <body>
 
 <header>
-
   <h1 id="title">時間割</h1>
 
   <div class="term-box">
@@ -22,44 +20,55 @@
     <input type="date" id="endDate">
     <button id="saveTerm">保存</button>
   </div>
-
 </header>
 
 
 <div id="app"></div>
 
 
-<!-- 編集モーダル -->
+<!-- モーダル -->
 <div id="modal" class="modal hidden">
 
   <div class="modal-box">
 
-    <h2>授業編集</h2>
+    <h2 id="modalTitle">授業管理</h2>
 
-    <label>
-      授業名
-      <input id="className">
-    </label>
+    <!-- タブ -->
+    <div class="tabs">
+      <button id="tabInfo" class="active">授業情報</button>
+      <button id="tabAttend">出席管理</button>
+    </div>
 
-    <label>
-      教室
-      <input id="room">
-    </label>
 
-    <label>
-      教員名
-      <input id="teacher">
-    </label>
+    <!-- 授業情報 -->
+    <div id="infoArea">
 
-    <label>
-      メモ
-      <textarea id="note"></textarea>
-    </label>
+      <label>授業名
+        <input id="className">
+      </label>
 
-    <label>
-      色
-      <input type="color" id="color" value="#90caf9">
-    </label>
+      <label>教室
+        <input id="room">
+      </label>
+
+      <label>教員
+        <input id="teacher">
+      </label>
+
+      <label>メモ
+        <textarea id="note"></textarea>
+      </label>
+
+      <label>色
+        <input type="color" id="color" value="#90caf9">
+      </label>
+
+    </div>
+
+
+    <!-- 出席管理 -->
+    <div id="attendArea" class="hidden"></div>
+
 
     <div class="btn-area">
       <button id="saveBtn">保存</button>
