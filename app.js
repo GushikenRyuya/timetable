@@ -1,6 +1,5 @@
 const days = ["月","火","水","木","金"];
 
-// 時限（修正版：昼休憩を明確化）
 const periods = [
   { id: 1, name: "１限", time: "8:30〜10:00" },
   { id: 2, name: "２限", time: "10:20〜11:50" },
@@ -10,24 +9,26 @@ const periods = [
   { id: 5, name: "５限", time: "16:20〜17:50" }
 ];
 
+const STATUS = ["出席","欠席","休講","オンデマンド","ONLINE"];
+
 let data = JSON.parse(localStorage.getItem("timetablePro")) || {};
 let term = JSON.parse(localStorage.getItem("term")) || {};
 
 let currentKey = null;
 
 
-// 保存
+/* ================= 基本 ================= */
+
 function save(){
   localStorage.setItem("timetablePro", JSON.stringify(data));
   render();
 }
 
 
-// 期間保存
 function saveTerm(){
 
-  term.start = document.getElementById("startDate").value;
-  term.end = document.getElementById("endDate").value;
+  term.start = startDate.value;
+  term.end = endDate.value;
 
   localStorage.setItem("term", JSON.stringify(term));
 
@@ -35,41 +36,40 @@ function saveTerm(){
 }
 
 
-// タイトル更新
 function updateTitle(){
 
   if(term.start && term.end){
 
-    document.getElementById("title").innerText =
-      `${term.start} ～ ${term.end} の時間割`;
+    const s = term.start.replaceAll("-","/");
+    const e = term.end.replaceAll("-","/");
+
+    title.innerText = `${s} ～ ${e} の時間割`;
 
   }else{
-
-    document.getElementById("title").innerText = "時間割";
+    title.innerText = "時間割";
   }
 }
 
 
-// 表描画（修正版）
+/* ================= 表描画 ================= */
+
 function render(){
 
   let html = "<table>";
 
-  // ヘッダー
   html += "<tr><th>時限</th>";
   days.forEach(d => html += `<th>${d}</th>`);
   html += "</tr>";
 
 
-  // 本体
   periods.forEach(p => {
 
     html += `
-      <tr>
-        <th class="period">
-          <div class="p-name">${p.name}</div>
-          <div class="p-time">${p.time}</div>
-        </th>
+    <tr>
+      <th class="period">
+        <div>${p.name}</div>
+        <div class="time">${p.time}</div>
+      </th>
     `;
 
     days.forEach(d => {
@@ -78,14 +78,15 @@ function render(){
       const item = data[key] || {};
 
       html += `
-        <td
-          style="background:${item.color || "#fff"}"
-          onclick="openModal('${key}')"
-        >
-          <div class="name">${item.name || ""}</div>
-          <div class="room">${item.room || ""}</div>
-        </td>
+      <td onclick="openModal('${key}')"
+          style="background:${item.color || "#fff"}">
+
+        <div class="name">${item.name || ""}</div>
+        <div class="room">${item.room || ""}</div>
+
+      </td>
       `;
+
     });
 
     html += "</tr>";
@@ -93,42 +94,133 @@ function render(){
 
   html += "</table>";
 
-  document.getElementById("app").innerHTML = html;
+  app.innerHTML = html;
 }
 
 
-// モーダル
+/* ================= モーダル ================= */
+
 function openModal(key){
 
   currentKey = key;
 
-  const item = data[key] || {};
+  if(!data[key]){
+    data[key] = { attend:{} };
+  }
 
-  document.getElementById("className").value = item.name || "";
-  document.getElementById("room").value = item.room || "";
-  document.getElementById("teacher").value = item.teacher || "";
-  document.getElementById("note").value = item.note || "";
-  document.getElementById("color").value = item.color || "#90caf9";
+  const item = data[key];
 
-  document.getElementById("modal").classList.remove("hidden");
+  className.value = item.name || "";
+  room.value = item.room || "";
+  teacher.value = item.teacher || "";
+  note.value = item.note || "";
+  color.value = item.color || "#90caf9";
+
+  buildAttend();
+
+  modal.classList.remove("hidden");
 }
 
 
 function closeModal(){
-  document.getElementById("modal").classList.add("hidden");
+  modal.classList.add("hidden");
 }
 
 
-// 保存
-document.getElementById("saveBtn").onclick = () => {
+/* ================= 出席管理 ================= */
+
+function buildAttend(){
+
+  attendArea.innerHTML = "";
+
+  if(!term.start || !term.end){
+    attendArea.innerHTML = "※期間を設定してください";
+    return;
+  }
+
+  let d = new Date(term.start);
+  const end = new Date(term.end);
+
+  const attend = data[currentKey].attend || {};
+
+  while(d <= end){
+
+    const key = d.toISOString().slice(0,10);
+
+    if(d.getDay() !== 0 && d.getDay() !== 6){
+
+      const row = document.createElement("div");
+      row.className = "att-row";
+
+      const date = document.createElement("span");
+      date.innerText = key.replaceAll("-","/");
+
+      const select = document.createElement("select");
+
+      STATUS.forEach(s => {
+
+        const op = document.createElement("option");
+        op.value = s;
+        op.innerText = s;
+
+        if(attend[key] === s) op.selected = true;
+
+        select.appendChild(op);
+
+      });
+
+      select.onchange = ()=>{
+
+        attend[key] = select.value;
+        data[currentKey].attend = attend;
+        save();
+      };
+
+      row.appendChild(date);
+      row.appendChild(select);
+
+      attendArea.appendChild(row);
+    }
+
+    d.setDate(d.getDate()+1);
+  }
+}
+
+
+/* ================= タブ ================= */
+
+tabInfo.onclick = ()=>{
+
+  tabInfo.classList.add("active");
+  tabAttend.classList.remove("active");
+
+  infoArea.classList.remove("hidden");
+  attendArea.classList.add("hidden");
+};
+
+
+tabAttend.onclick = ()=>{
+
+  tabAttend.classList.add("active");
+  tabInfo.classList.remove("active");
+
+  infoArea.classList.add("hidden");
+  attendArea.classList.remove("hidden");
+};
+
+
+/* ================= 保存 ================= */
+
+saveBtn.onclick = ()=>{
 
   data[currentKey] = {
 
-    name: document.getElementById("className").value,
-    room: document.getElementById("room").value,
-    teacher: document.getElementById("teacher").value,
-    note: document.getElementById("note").value,
-    color: document.getElementById("color").value
+    name: className.value,
+    room: room.value,
+    teacher: teacher.value,
+    note: note.value,
+    color: color.value,
+    attend: data[currentKey].attend || {}
 
   };
 
@@ -137,17 +229,15 @@ document.getElementById("saveBtn").onclick = () => {
 };
 
 
-document.getElementById("saveTerm").onclick = saveTerm;
-document.getElementById("closeBtn").onclick = closeModal;
+closeBtn.onclick = closeModal;
+
+saveTerm.onclick = saveTerm;
 
 
-// 初期化
-if(term.start){
-  document.getElementById("startDate").value = term.start;
-}
-if(term.end){
-  document.getElementById("endDate").value = term.end;
-}
+/* ================= 初期 ================= */
+
+if(term.start) startDate.value = term.start;
+if(term.end) endDate.value = term.end;
 
 updateTitle();
 render();
