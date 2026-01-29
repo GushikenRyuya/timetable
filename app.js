@@ -10,14 +10,14 @@ const periods = [
   { id: 5, name: "５限", time: "16:20〜17:50" }
 ];
 
-const STATUS = ["未選択", "出席", "欠席", "休講", "オンデマンド", "オンライン"];
+const STATUS = ["未選択", "出席", "欠席", "休講", "オンデマンド", "ONLINE"];
 
 const STATUS_EMOJI = {
   "出席": "✓",
   "欠席": "✕",
   "休講": "休",
   "オンデマンド": "📹",
-  "オンライン": "💻"
+  "ONLINE": "💻"
 };
 
 let data = JSON.parse(localStorage.getItem("timetablePro")) || {};
@@ -335,3 +335,4 @@ if (term.end) endDate.value = term.end;
 
 updateTitle();
 render();
+
