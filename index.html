@@ -2,80 +2,72 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>時間割</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="時間割">
+<title>時間割管理</title>
 <link rel="stylesheet" href="style.css">
-
 </head>
 <body>
-
 <header>
   <h1 id="title">時間割</h1>
-
   <div class="term-box">
-    <input type="date" id="startDate">
-    ～
-    <input type="date" id="endDate">
-    <button id="saveTerm" type="button">保存</button>
+    <input type="date" id="startDate" placeholder="開始日">
+    <span class="separator">〜</span>
+    <input type="date" id="endDate" placeholder="終了日">
+    <button id="saveTermBtn" type="button">保存</button>
   </div>
 </header>
 
-
-<div id="app"></div>
-
+<main id="app"></main>
 
 <!-- モーダル -->
 <div id="modal" class="modal hidden">
-
+  <div class="modal-overlay"></div>
   <div class="modal-box">
-
-    <h2>授業管理</h2>
-
+    <div class="modal-header">
+      <h2>授業管理</h2>
+      <button id="closeBtn" type="button" class="close-btn">✕</button>
+    </div>
+    
     <div class="tabs">
-      <button id="tabInfo" type="button" class="active">授業情報</button>
-      <button id="tabAttend" type="button">出席管理</button>
+      <button id="tabInfo" type="button" class="tab-btn active">授業情報</button>
+      <button id="tabAttend" type="button" class="tab-btn">出席管理</button>
     </div>
-
-
-    <div id="infoArea">
-
-      <label>授業名
-        <input id="className">
-      </label>
-
-      <label>教室
-        <input id="room">
-      </label>
-
-      <label>教員
-        <input id="teacher">
-      </label>
-
-      <label>メモ
-        <textarea id="note"></textarea>
-      </label>
-
-      <label>色
-        <input type="color" id="color" value="#90caf9">
-      </label>
-
+    
+    <div class="modal-content">
+      <div id="infoArea">
+        <label class="form-label">
+          <span>授業名</span>
+          <input type="text" id="className" placeholder="例：線形代数学">
+        </label>
+        <label class="form-label">
+          <span>教室</span>
+          <input type="text" id="room" placeholder="例：A棟301">
+        </label>
+        <label class="form-label">
+          <span>教員</span>
+          <input type="text" id="teacher" placeholder="例：山田太郎">
+        </label>
+        <label class="form-label">
+          <span>メモ</span>
+          <textarea id="note" rows="3" placeholder="備考やメモを入力"></textarea>
+        </label>
+        <label class="form-label">
+          <span>色</span>
+          <input type="color" id="color" value="#90caf9">
+        </label>
+      </div>
+      
+      <div id="attendArea" class="hidden"></div>
     </div>
-
-
-    <div id="attendArea" class="hidden"></div>
-
-
+    
     <div class="btn-area">
-      <button id="saveBtn" type="button">保存</button>
-      <button id="closeBtn" type="button">閉じる</button>
+      <button id="saveBtn" type="button" class="btn-primary">保存</button>
     </div>
-
   </div>
-
 </div>
-
 
 <script src="app.js"></script>
 </body>
