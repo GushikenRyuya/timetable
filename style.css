@@ -1,48 +1,88 @@
 body {
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  margin: 10px;
-  background: #fafafa;
+  margin: 0;
+  background: #f5f7fa;
+}
+
+
+/* ヘッダー */
+
+header {
+  background: #ffffff;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 h1 {
+  font-size: 18px;
   text-align: center;
+  margin: 5px 0;
 }
 
-.hint {
-  text-align: center;
+.term-box {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
   font-size: 12px;
-  color: #666;
 }
+
+.term-box input {
+  font-size: 12px;
+}
+
+.term-box button {
+  font-size: 12px;
+}
+
 
 /* 表 */
+
+#app {
+  padding: 5px;
+}
 
 table {
   border-collapse: collapse;
   width: 100%;
+  background: #fff;
 }
 
 th, td {
   border: 1px solid #ccc;
-  padding: 4px;
   text-align: center;
+  padding: 4px;
 }
 
 th {
-  background: #eee;
+  background: #eaf0f7;
+  font-size: 11px;
+}
+
+.period {
+  width: 65px;
+}
+
+.period span {
+  font-size: 9px;
+  color: #555;
 }
 
 td {
-  height: 60px;
+  height: 55px;
+  font-size: 11px;
   cursor: pointer;
 }
 
 .name {
   font-weight: bold;
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .room {
-  font-size: 11px;
+  font-size: 10px;
   color: #444;
 }
 
@@ -51,10 +91,7 @@ td {
 
 .modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   background: rgba(0,0,0,0.4);
 
   display: flex;
@@ -69,22 +106,34 @@ td {
 .modal-box {
   background: #fff;
   width: 90%;
-  max-width: 320px;
+  max-width: 340px;
   padding: 15px;
-  border-radius: 8px;
+  border-radius: 10px;
+}
+
+.modal-box h2 {
+  text-align: center;
+  margin-bottom: 10px;
 }
 
 .modal-box label {
   display: block;
-  margin-bottom: 10px;
   font-size: 13px;
+  margin-bottom: 8px;
 }
 
 .modal-box input,
 .modal-box textarea {
   width: 100%;
+  font-size: 14px;
+  padding: 5px;
   margin-top: 3px;
 }
+
+textarea {
+  height: 60px;
+}
+
 
 .btn-area {
   text-align: center;
@@ -92,6 +141,13 @@ td {
 }
 
 button {
-  padding: 6px 15px;
-  margin: 0 5px;
+  padding: 7px 15px;
+  border: none;
+  background: #2196f3;
+  color: #fff;
+  border-radius: 5px;
+}
+
+button:last-child {
+  background: #999;
 }
