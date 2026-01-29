@@ -112,8 +112,34 @@ function render() {
       let statusDisplay = "";
       if (item.attend && thisWeek[d]) {
         const todayStatus = item.attend[thisWeek[d]];
-        if (todayStatus && STATUS_EMOJI[todayStatus]) {
-          statusDisplay = `<div class="status-badge">${STATUS_EMOJI[todayStatus]}</div>`;
+        if (todayStatus && todayStatus !== "未選択") {
+          let badgeClass = "status-badge";
+          let statusText = "";
+          
+          switch(todayStatus) {
+            case "出席":
+              badgeClass += " status-attend";
+              statusText = "✓ 出席";
+              break;
+            case "欠席":
+              badgeClass += " status-absent";
+              statusText = "✕ 欠席";
+              break;
+            case "休講":
+              badgeClass += " status-cancelled";
+              statusText = "休講";
+              break;
+            case "オンデマンド":
+              badgeClass += " status-ondemand";
+              statusText = "📹 配信";
+              break;
+            case "オンライン":
+              badgeClass += " status-online";
+              statusText = "💻 Online";
+              break;
+          }
+          
+          statusDisplay = `<div class="${badgeClass}">${statusText}</div>`;
         }
       }
 
